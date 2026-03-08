@@ -18,12 +18,15 @@ void Game::Initialize() {
         return;
     };
 
+    windowWidth = 800;
+    windowHeight = 600;
+
     window = SDL_CreateWindow(
         "Tram's Game Engine", 
         SDL_WINDOWPOS_CENTERED, 
         SDL_WINDOWPOS_CENTERED,
-        800,
-        600,
+        windowWidth,
+        windowHeight,
         SDL_WINDOW_BORDERLESS
     );
 
@@ -39,10 +42,13 @@ void Game::Initialize() {
         return;
     }
 
+    SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+
     isRunning = true;
 }
 
 void Game::Run() {
+    Setup();
     while(isRunning) {
         ProcessInput();
         Update();
@@ -66,15 +72,23 @@ void Game::ProcessInput() {
     };
 }
 
+void Game::Setup() {
+    // Initialize game objects
+}
+
 void Game::Update() {
     // Update game objects
 }
 
 void Game::Render() {
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDL_SetRenderDrawColor(renderer, 21, 21, 21, 255);
     SDL_RenderClear(renderer);
 
     // Render game objects
+    // Draw a rectangle
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_Rect player = {10, 10, 20, 20};
+    SDL_RenderFillRect(renderer, &player);
 
     SDL_RenderPresent(renderer);
 }
