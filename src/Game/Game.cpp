@@ -1,6 +1,8 @@
 #include "Game.h"
 #include "../Logger/Logger.h"
 #include "../ECS/ECS.h"
+#include "../Components/TransformComponent.h"
+#include "../Components/RigidBodyComponent.h"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <glm/glm.hpp>
@@ -81,8 +83,12 @@ void Game::Setup() {
     // Create an entity
     Entity tank = registry->CreateEntity();
 
-    // 
-    
+    // Add some components to that entity
+    tank.AddComponent<TransformComponent>(glm::vec2(10.0, 30.0), glm::vec2(1.0, 1.0), 0.0);
+    tank.AddComponent<RigidBodyComponent>(glm::vec2(10.0, 50.0));
+
+    // Remove a component from the entity
+    tank.RemoveComponent<TransformComponent>();
 }
 
 void Game::Update() {
