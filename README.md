@@ -31,7 +31,7 @@ The goal is to better understand how modern game engines are structured at the s
 
 ## Purpose
 
-This project is primarily a learning-focused systems project to deepen my understanding of:
+This project is primarily a learning-focused systems project to deepen the understanding of:
 - game loops and rendering
 - memory-aware engine architecture
 - component-based design in C++
