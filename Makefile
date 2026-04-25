@@ -15,7 +15,8 @@ INCLUDE_PATH = -Ilibs/glm \
 SRC_FILES = ./src/*.cpp \
             ./src/Game/*.cpp \
             ./src/Logger/*.cpp \
-            ./src/ECS/*.cpp
+            ./src/ECS/*.cpp \
+            ./src/AssetStore/*.cpp
 
 LINKER_FLAGS = -L/opt/homebrew/lib \
                -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer \

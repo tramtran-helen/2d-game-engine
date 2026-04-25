@@ -4,7 +4,11 @@
 #include "../ECS/ECS.h"
 #include "../Components/TransformComponent.h"
 #include "../Components/SpriteComponent.h"
+#include "../AssetStore/AssetStore.h"
 #include <SDL.h>
+#include <algorithm>
+#include <memory>
+#include <vector>
 
 class RenderSystem: public System {
     public:
@@ -13,21 +17,48 @@ class RenderSystem: public System {
             RequireComponent<SpriteComponent>();
         }
 
-        void Update(SDL_Renderer* renderer) {
-            // Loop all entities that the system is interested in
-            for (auto entity: GetSystemEntities()) {
-                // Update entity position based on its velocity
-                const auto transform = entity.GetComponent<TransformComponent>();
-                const auto sprite = entity.GetComponent<SpriteComponent>();
+        void Update(SDL_Renderer* renderer, std::unique_ptr<AssetStore>& assetStore) {
+            // Create a vector with both Sprite and Transform component of all entities
+            struct RenderableEntity {
+                TransformComponent transformComponent;
+                SpriteComponent spriteComponent;
+            };
 
-                SDL_Rect objRect = {
-                    static_cast<int>(transform.position.x),
-                    static_cast<int>(transform.position.y),
-                    sprite.width,
-                    sprite.height
+            std::vector<RenderableEntity> renderableEntities;
+            for (auto entity : GetSystemEntities()) {
+                RenderableEntity renderableEntity;
+                renderableEntity.spriteComponent = entity.GetComponent<SpriteComponent>();
+                renderableEntity.transformComponent = entity.GetComponent<TransformComponent>();
+                renderableEntities.emplace_back(renderableEntity);
+            }
+
+            // Sort the vector by the z-index value
+            std::sort(renderableEntities.begin(), renderableEntities.end(), [](const RenderableEntity& a, const RenderableEntity& b) {
+                return a.spriteComponent.zIndex < b.spriteComponent.zIndex;
+            });
+            
+            // Loop all entities that the system is interested in
+            for (const auto& entity: renderableEntities) {
+                // Set the source rectangle of our original sprite texture
+                SDL_Rect srcRect = entity.spriteComponent.srcRect;
+
+                // Set the destination rectangle with the x, y position to be rendered
+                SDL_Rect dstRect = {
+                    static_cast<int>(entity.transformComponent.position.x),
+                    static_cast<int>(entity.transformComponent.position.y),
+                    static_cast<int>(entity.spriteComponent.width * entity.transformComponent.scale.x),
+                    static_cast<int>(entity.spriteComponent.height * entity.transformComponent.scale.y)
                 };
-                SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-                SDL_RenderFillRect(renderer, &objRect);
+
+                SDL_RenderCopyEx(
+                    renderer,
+                    assetStore->GetTexture(entity.spriteComponent.assetId),
+                    &srcRect,
+                    &dstRect,
+                    entity.transformComponent.rotation,
+                    nullptr,
+                    SDL_FLIP_NONE
+                );
             }
         }
 };
