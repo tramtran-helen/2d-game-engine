@@ -4,20 +4,25 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <SDL.h>
+#include <SDL_image.h>
 
 struct SpriteComponent {
     std::string assetId;
     int width;
     int height;
     int zIndex;
+    bool isFixed;
+    SDL_RendererFlip flip;
     SDL_Rect srcRect;
 
-    SpriteComponent(std::string assetId= "", int width = 0, int height = 0, int zIndex = 0, int srcRecX = 0, int srcRecY = 0) {
+    SpriteComponent(std::string assetId = "", int width = 0, int height = 0, int zIndex = 0, bool isFixed = false, int srcRectX = 0, int srcRectY = 0) {
         this->assetId = assetId;
         this->width = width;
         this->height = height;
         this->zIndex = zIndex;
-        this->srcRect = {srcRecX, srcRecY, width, height};
+        this->isFixed = isFixed;
+        this->flip = SDL_FLIP_NONE;
+        this->srcRect = {srcRectX, srcRectY, width, height};
     }
 };
 
