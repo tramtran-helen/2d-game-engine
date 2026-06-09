@@ -1,0 +1,3 @@
+*.lua linguist-detectable=false
+libs/** linguist-vendored=true
+assets/** linguist-detectable=false
