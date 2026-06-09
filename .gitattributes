@@ -1,3 +1,5 @@
 libs/** linguist-vendored=true
-assets/** linguist-detectable=false
+assets/images/** linguist-detectable=false
+assets/tilemaps/** linguist-detectable=false
+assets/fonts/** linguist-detectable=false
 *.html linguist-detectable=false
