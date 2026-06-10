@@ -103,3 +103,7 @@ libs/
 The engine follows a strict separation between data and logic. Components hold only plain data. Systems hold only logic and operate on entities that match their required component signature. No game object classes exist. Everything is an entity with a set of components attached.
 
 Level data including assets, tilemap layout, entity definitions, and per entity Lua scripts lives entirely in Lua files under `assets/scripts/`. No level data is hardcoded in C++.
+
+## Credits
+
+Gustavo Pezzi
